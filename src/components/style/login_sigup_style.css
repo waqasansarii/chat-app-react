@@ -1,0 +1,65 @@
+.main_login_div{
+    /* border: 2px solid; */
+    width: 500px;
+    margin: 0px auto;
+    padding: 15px;
+    box-shadow: 0px 0px 3px gray;
+    margin-top: 30px;
+    padding-bottom: 20px;
+}
+.form_div{
+    margin-top: 20px;
+}
+.fields_div{
+    display: flex;
+    flex-direction: column;
+}
+.fields_div>label{
+    margin-top: 10px;
+    font-size: .9em;
+    font-weight: 700px;
+    /* color: gray; */
+}
+.form_input{
+    margin-top: 8px;
+    width: 100%;
+    padding: 8px 5px;
+    font-size: 1em;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid gainsboro;
+
+}
+.login_btn{
+    margin-top: 10px;
+    width: 100%;
+    font-size: 1em;
+    padding: 10px;
+    outline: none;
+    border: none;
+    border-radius: 7px;
+}
+.create_div{
+    text-align: center;
+    padding-top: 15px;
+}
+.error{
+    font-size: .8em;
+    color: red;
+    margin-top: 5px;
+    /* border: 2px solid; */
+}
+.err2{
+    margin-top: -15px;
+}
+.eye_icon{
+    position: relative;
+    left: 440px;
+    top: -25px;
+}
+.eye_icon:hover{
+    cursor: pointer;
+}
+.eye_icon_color{
+    color: royalblue;
+}
