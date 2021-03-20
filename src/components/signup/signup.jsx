@@ -1,105 +1,95 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useFormik } from 'formik'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
-import * as yup from 'yup'
+import Button from '../button'
+import { TiTick } from 'react-icons/ti'
+import { FaRegUserCircle } from 'react-icons/fa'
+import { useHistory } from 'react-router-dom'
 
 
 
 
 const Signup = () => {
 
-    let [hide, setHide] = useState(false)
+    const history = useHistory()
 
-    const formik = useFormik({
-        initialValues: {
-            name: '',
-            email: '',
-            password: '',
-            confirmPassword: ''
-        },
-        onSubmit: (value,{resetForm}) => {
-            console.log(value)
-            resetForm({value:''})
-        },
-        validationSchema: yup.object().shape({
-            name: yup.string()
-                .min(3, 'To short').required('Required'),
-            email: yup.string()
-                .email('Invalid email').required('Email is required'),
-            password: yup.string().min(6, 'Toshort')
-                .max(20, 'To long').required('Password is required'),
-            confirmPassword: yup.string().oneOf(
-                [yup.ref('password')],
-                'Both password need to be same'
-            )
-            // yup.string().when('password',{
-            //     is: value => (value && value.length>0 ? true : false),
-            //     then:yup.string().oneOf(
-            // [yup.ref('password')],
-            // 'Both password need to be same'
-            // )
-            // })
-        })
-    });
+    let [hide, setHide] = useState(false)
+    
+    let [captchaVal, setCaptchaVal] = useState('2')
+    let [username, setuserName] = useState('')
+    let [email, setemail] = useState('')
+    let [password, setPassword] = useState('')
+
 
     const handlePasswordSee = () => {
         setHide(!hide)
     }
+    // const handleConfirmPasswordSee = () => {
+    //     setconfirmPassword(!confirmPassword)
+    //     // console.log(e.target.value)
+    // }
 
+    const changeCaptchaVal = () => {
+        let mathRandom = Math.random() * 10
+        let floor = Math.floor(mathRandom).toString()
+        setCaptchaVal(floor)
+    }
 
-
-
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        history.push('/')
+    }
+    const handleuserName = (e) => {
+        let uper = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+        setuserName(uper)
+    }
+    const handleEmail = (e) => {
+        let uper = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+        setemail(uper)
+    }
+    const handlePassword = (e) => {
+        let uper = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+        setPassword(uper)
+    }
     return (
         <div className='login_container'>
             <div className='main_login_div'>
-                <h2 className='login_head'>Sign Up</h2>
+                <FaRegUserCircle className='user_icon' />
+                <h2 className='login_para'>Create an account</h2>
                 <div className='form_div'>
-                    <form onSubmit={formik.handleSubmit} >
+                    <form onSubmit={handleSubmit} >
                         <div className='fields_div'>
-                            <label htmlFor="email">Name</label>
                             <input
                                 className='form_input'
                                 type="text"
                                 name="name"
                                 id="name"
-                                placeholder='Name'
-                                onChange={formik.handleChange}
-                                value={formik.values.name}
+                                placeholder='username'
+                                onChange={(e) => handleuserName(e)}
+                                value={username}
                             />
-                            {formik.errors.name && formik.touched.name ?
-                                <div className='error'>{formik.errors.name}</div>
-                                :
-                                null
-                            }
                         </div>
                         <div className='fields_div'>
-                            <label htmlFor="email">Email</label>
                             <input
                                 className='form_input'
                                 type="email"
                                 name="email"
                                 id="email"
                                 placeholder='Email'
-                                onChange={formik.handleChange}
-                                value={formik.values.email}
+                                onChange={(e)=>handleEmail(e)}
+                                value={email}
                             />
-                            {formik.errors.email && formik.touched.email ?
-                                <div className='error'>{formik.errors.email}</div>
-                                :
-                                null
-                            }
+
                         </div>
                         <div className='fields_div'>
-                            <label htmlFor="password">Password</label>
                             <input
                                 className='form_input'
                                 type={!hide ? "password" : 'text'}
                                 name="password"
                                 id="password"
                                 placeholder='password'
-                                onChange={formik.handleChange}
-                                value={formik.values.password}
+                                onChange={(e)=>handlePassword(e)}
+                                value={password}
                             />
                             {!hide ?
                                 <AiOutlineEye className='eye_icon' onClick={handlePasswordSee} />
@@ -109,44 +99,45 @@ const Signup = () => {
                                     onClick={handlePasswordSee}
                                 />
                             }
-                            {formik.errors.password && formik.touched.password ?
-                                <div className='error err2'>{formik.errors.password}</div>
-                                :
-                                null
-                            }
                         </div>
-                        <div className='fields_div'>
-                            <label htmlFor="password">Confirm Password</label>
+                        {/* <div className='fields_div'>
                             <input
-                                className='form_input'
-                                type={!hide ? "password" : 'text'}
+                                className='form_input signup'
+                                type={!confirmPassword ? "password" : 'text'}
                                 name="confirmPassword"
                                 id="confirmPassword"
-                                placeholder='password'
-                                onChange={formik.handleChange}
-                                value={formik.values.confirmPassword}
+                                placeholder='confirm password'
                             />
-                            {!hide ?
-                                <AiOutlineEye className='eye_icon' onClick={handlePasswordSee} />
+                            {!confirmPassword ?
+                                <AiOutlineEye className='eye_icon' onClick={handleConfirmPasswordSee} />
                                 :
                                 <AiOutlineEyeInvisible
-                                    className={hide ? 'eye_icon eye_icon_color' : 'eye_icon'}
-                                    onClick={handlePasswordSee}
+                                    className={confirmPassword ? 'eye_icon eye_icon_color' : 'eye_icon'}
+                                    onClick={handleConfirmPasswordSee}
                                 />
                             }
-                            {formik.errors.confirmPassword && formik.touched.confirmPassword ?
-                                <div className='error err2'>{formik.errors.confirmPassword}</div>
-                                :
-                                null
-                            }
+                        </div> */}
+                        <div>
+
+                            <div className='fields_div captcha_div'>
+                                <input
+                                    className='form_input captcha'
+                                    type="text"
+                                    name="captcha"
+                                    id="captcha"
+                                    placeholder='captcha'
+                                />
+                                <input type="button" readOnly={true} className='captcha_num' onClick={changeCaptchaVal}
+                                    value={captchaVal}
+                                />
+                            </div>
                         </div>
-                        <button className='login_btn' type="submit">Sign up</button>
-                        <div className='create_div'>
-                            <p>already have an account </p>
-                            <Link className='create_link' to='/'>login</Link>
-                        </div>
+                        <Button value={<TiTick />} className='login_btn' />
                     </form>
                 </div>
+            </div>
+            <div className='create_div' onClick={() => history.push('/')}>
+                <Link className='create_link' to='/'>already have an account</Link>
             </div>
         </div>
     )

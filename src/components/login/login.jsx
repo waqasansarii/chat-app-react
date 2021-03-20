@@ -1,72 +1,75 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useFormik } from 'formik'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
-import * as yup from 'yup'
 import '../style/login_sigup_style.css'
+import Button from '../button'
+import head from '../../assets/head.png'
+import { TiTick } from 'react-icons/ti'
+import { useHistory } from 'react-router-dom'
 
 
 
+const Login = props => {
 
-const Login = () => {
-
+    const history = useHistory()
+    // console.log(props.history.location.state)
     let [hide, setHide] = useState(false)
 
-    const formik = useFormik({
-        initialValues: {
-            email: '',
-            password: ''
-        },
-        onSubmit: (value) => {
-            console.log(value)
-        },
-        validationSchema: yup.object().shape({
-            email: yup.string()
-                .email('Invalid email').required('Email is required'),
-            password: yup.string().min(6, 'Toshort')
-                .max(20, 'To long').required('Password is required')
-        })
-    });
+    let [captchaValLogin, setCaptchaValLogin] = useState('2')
+    let [value,setValue] = useState({email:'',password:''})
 
     const handlePasswordSee = () => {
         setHide(!hide)
     }
 
+    const changeCaptchaValLogin = () => {
+        let mathRandom = Math.random() * 10
+        let floor = Math.floor(mathRandom).toString()
+        setCaptchaValLogin(floor)
+    }
+
+
+    const handleSubmit = (e)=>{
+           e.preventDefault();
+           history.push('/activate')
+    }
+    const handleChange = (e)=>{
+          let uper= e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+          setValue({[e.target.id]:uper})
+    }
 
 
     return (
         <div className='login_container'>
             <div className='main_login_div'>
-                <h2 className='login_head'>Log In</h2>
                 <div className='form_div'>
-                    <form onSubmit={formik.handleSubmit} >
+                    <div>
+                        <img className='head_img' src={head} alt="" />
+                    </div>
+                    <p className='login_head'>Easy Deals</p>
+                    <p className='login_para'>Hi there! Please Sign in</p>
+                    <form onSubmit={handleSubmit} >
                         <div className='fields_div'>
-                            <label htmlFor="email">Email</label>
                             <input
                                 className='form_input'
                                 type="email"
                                 name="email"
                                 id="email"
-                                placeholder='Email'
-                                onChange={formik.handleChange}
-                                value={formik.values.email}
+                                placeholder='username'
+                                onChange={(e)=>handleChange(e)}
+                                value={value.email}
                             />
-                            {formik.errors.email && formik.touched.email ?
-                                <div className='error'>{formik.errors.email}</div>
-                                :
-                                null
-                            }
+
                         </div>
                         <div className='fields_div'>
-                            <label htmlFor="password">Password</label>
                             <input
                                 className='form_input'
                                 type={!hide ? "password" : 'text'}
                                 name="password"
                                 id="password"
                                 placeholder='password'
-                                onChange={formik.handleChange}
-                                value={formik.values.password}
+                                onChange={(e)=>handleChange(e)}
+                                value={value.password}
                             />
                             {!hide ?
                                 <AiOutlineEye className='eye_icon' onClick={handlePasswordSee} />
@@ -76,19 +79,28 @@ const Login = () => {
                                     onClick={handlePasswordSee}
                                 />
                             }
-                            {formik.errors.password && formik.touched.password ?
-                                <div className='error err2'>{formik.errors.password}</div>
-                                :
-                                null
-                            }
+                            
                         </div>
-                        <button className='login_btn' type="submit">Log In</button>
-                        <div className='create_div'>
-                            <p>or </p>
-                            <Link className='create_link' to='/signup'>Create an account</Link>
+                        <div>
+                            <div className='fields_div captcha_div'>
+                                <input
+                                    className='form_input captcha'
+                                    type="text"
+                                    name="captcha"
+                                    id="captcha"
+                                    placeholder='captcha'
+                                />
+                                <input type="button" readOnly={true} className='captcha_num' onClick={changeCaptchaValLogin}
+                                    value={captchaValLogin}
+                                />
+                            </div>
                         </div>
+                        <Button value={<TiTick />} className='login_btn' />
                     </form>
                 </div>
+            </div>
+            <div className='create_div' onClick={() => history.push('/signup')} >
+                <Link className='create_link' to='/signup'>Create an account</Link>
             </div>
         </div>
     )
